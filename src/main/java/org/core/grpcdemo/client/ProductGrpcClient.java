@@ -2,14 +2,12 @@ package org.core.grpcdemo.client;
 
 import org.core.grpcdemo.proto.*;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ProductGrpcClient {
 
     private final ProductServiceGrpc.ProductServiceBlockingStub productServiceStub;
 
-    @Autowired
     public ProductGrpcClient(ProductServiceGrpc.ProductServiceBlockingStub productServiceStub) {
         this.productServiceStub = productServiceStub;
     }

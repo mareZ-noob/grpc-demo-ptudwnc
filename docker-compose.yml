@@ -1,0 +1,32 @@
+services:
+  envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile.envoy
+    ports:
+      - "8080:8080"  # gRPC-Web port (for React app)
+      - "9901:9901"  # Envoy admin interface
+    networks:
+      - grpc-network
+    depends_on:
+      - grpc-server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grpc-server:
+    image: eclipse-temurin:21-jre-alpine
+    container_name: grpc-server
+    volumes:
+      - ./target:/app
+    working_dir: /app
+    command: java -jar grpc-demo-0.0.1-SNAPSHOT.jar
+    ports:
+      - "9090:9090"  # gRPC port
+    networks:
+      - grpc-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+networks:
+  grpc-network:
+    driver: bridge
